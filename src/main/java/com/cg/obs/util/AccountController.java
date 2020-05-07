@@ -3,7 +3,6 @@
  */
 package com.cg.obs.util;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cg.obs.model.Account;
-import com.cg.obs.model.Transaction;
 import com.cg.obs.service.AccountService;
 
 import io.swagger.annotations.Api;
@@ -34,8 +32,8 @@ import io.swagger.annotations.ApiResponses;
 public class AccountController {
 	@Autowired
 	private AccountService service;
-	
-	@GetMapping(path = "/accounts")
+
+	@GetMapping(path = "/accounts/get")
 	@ApiOperation(value = "getAllAccounts", nickname = "getAllAccounts")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success", response = Account.class),
 			@ApiResponse(code = 500, message = "Failure", response = Account.class) })
@@ -59,14 +57,15 @@ public class AccountController {
 			@ApiResponse(code = 500, message = "Failure", response = Account.class) })
 	public List<Account> getPendingAccounts() {
 		System.out.println("This function will return list of all pending account");
-		return service.findAll().stream().filter(x->("Pending".equals(x.getAccountStatus()))).collect(Collectors.toList());
+		return service.findAll().stream().filter(x -> ("Pending".equals(x.getAccountStatus())))
+				.collect(Collectors.toList());
 	}
-	
+
 	@GetMapping(path = "/accounts/foruser/{userId}")
 	@ApiOperation(value = "getAccountsForUser", nickname = "getAccountsForUser")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Success", response = Account.class),
 			@ApiResponse(code = 500, message = "Failure", response = Account.class) })
-	public List<Account> getAccountsForUser(@PathVariable String userId){
+	public List<Account> getAccountsForUser(@PathVariable String userId) {
 		System.out.println("this will return list of accounts for a user");
 		return service.getAccountsByUserId(userId);
 	}
